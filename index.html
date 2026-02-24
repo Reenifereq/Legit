@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legitymacja Studencka - Wizualizacja</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --card-gradient: linear-gradient(135deg, #2ebf91, #38c5c4);
+            --text-main: #1a1a1a;
+            --text-muted: #5a5a5a;
+            --green-success: #3a7d44;
+            --white: #ffffff;
+            --blue-link: #0056b3;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e0e0e0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 80px;
+            box-sizing: border-box;
+        }
+
+        /* Nagłówek i czas */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 20px 10px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .header .back-btn {
+            color: var(--blue-link);
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .header .title {
+            margin-left: 15px;
+            color: var(--text-main);
+        }
+
+        .time-display {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Główna karta (zielona) */
+        .id-card {
+            background: var(--card-gradient);
+            margin: 0 20px;
+            border-radius: 16px 16px 0 0;
+            padding: 20px;
+            color: var(--text-main);
+            display: flex;
+            gap: 15px;
+        }
+
+        .id-left {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100px;
+        }
+
+        .photo-placeholder {
+            width: 100px;
+            height: 130px;
+            background-color: #ddd;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .flag {
+            width: 60px;
+            height: 35px;
+            background: linear-gradient(to bottom, white 50%, #dc143c 50%);
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .id-right {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .data-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-value {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .data-label {
+            font-size: 11px;
+            color: rgba(0, 0, 0, 0.6);
+            margin: 2px 0 0 0;
+        }
+
+        /* Pasek statusu */
+        .status-bar {
+            background: var(--white);
+            margin: 0 20px;
+            padding: 15px 20px;
+            border-radius: 0 0 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--green-success);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--green-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* Przyciski akcji */
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            color: var(--blue-link);
+        }
+
+        .icon-circle.danger {
+            color: #d61a1a;
+        }
+
+        /* Sekcja ze szczegółami */
+        .details-section {
+            background: var(--white);
+            margin: 0 20px;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 15px 0;
+        }
+
+        .barcode-container {
+            margin-top: 15px;
+            height: 80px;
+            width: 100%;
+            background: repeating-linear-gradient(
+                to right,
+                #000 0, #000 3px,
+                transparent 3px, transparent 5px,
+                #000 5px, #000 6px,
+                transparent 6px, transparent 10px,
+                #000 10px, #000 14px,
+                transparent 14px, transparent 16px
+            );
+        }
+
+        /* Nawigacja dolna */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0 25px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .nav-item.active {
+            color: var(--blue-link);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    
+    <div class="header">
+        <span class="back-btn">&lt; Wróć</span>
+        <span class="title">Legitymacja studencka</span>
+    </div>
+
+    <div class="time-display" id="live-time">
+        Czas: ładowanie...
+    </div>
+
+    <div class="id-card">
+        <div class="id-left">
+            <img src="https://i.ibb.co/Rk6gMqX6/Clean-Shot-2026-02-24-at-10-50-16.png" alt="Zdjęcie studenta" class="photo-placeholder">
+            <div class="flag"></div>
+        </div>
+        <div class="id-right">
+            <div class="data-group">
+                <p class="data-value">GABRIELA</p>
+                <p class="data-label">Imię (imiona)</p>
+            </div>
+            <div class="data-group">
+                <p class="data-value">WONTORCZYK</p>
+                <p class="data-label">Nazwisko</p>
+            </div>
+            <div class="data-group">
+                <p class="data-value">03.10.2000</p>
+                <p class="data-label">Data urodzenia</p>
+            </div>
+            <div class="data-group">
+                <p class="data-value">00300306044</p>
+                <p class="data-label">Numer PESEL</p>
+            </div>
+            <div class="data-group">
+                <p class="data-value">01.10.2025</p>
+                <p class="data-label">Data wydania</p>
+            </div>
+            <div class="data-group">
+                <p class="data-value">UNIWERSYTET WARSZAWSKI</p>
+                <p class="data-label">Nazwa uczelni</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div class="status-icon">✓</div>
+        <span>Dokument ważny</span>
+    </div>
+
+    <div class="action-buttons">
+        <button class="action-btn">
+            <div class="icon-circle">⛶</div>
+            <span>Potwierdź<br>swoje dane</span>
+        </button>
+        <button class="action-btn">
+            <div class="icon-circle">🚌</div>
+            <span>Bezpieczny<br>autobus</span>
+        </button>
+        <button class="action-btn">
+            <div class="icon-circle danger">🗑</div>
+            <span>Usuń<br>dokument</span>
+        </button>
+    </div>
+
+    <div class="details-section">
+        <div class="data-group">
+            <p class="data-label">Numer albumu</p>
+            <p class="data-value">489880</p>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="data-group">
+            <p class="data-label">Kod kreskowy</p>
+            <div class="barcode-container"></div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">📄</div>
+            <span>Dokumenty</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📁</div>
+            <span>Usługi</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">回</div>
+            <span>Kod QR</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">⚙</div>
+            <span>Więcej</span>
+        </div>
+    </nav>
+
+</div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear();
+        
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        const dateString = `${day}.${month}.${year}`;
+        
+        document.getElementById('live-time').textContent = `Czas: ${timeString} ${dateString}`;
+    }
+
+    // Pierwsze wywołanie i ustawienie interwału co sekundę
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>
