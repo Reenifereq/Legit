@@ -1,0 +1,15 @@
+{
+  "name": "Legitymacja Studencka",
+  "short_name": "Legitymacja",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#2ebf91",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/vvkmYN8h/Clean-Shot-2026-02-24-at-10-43-46.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
